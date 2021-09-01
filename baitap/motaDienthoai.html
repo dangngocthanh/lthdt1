@@ -5,6 +5,33 @@
     <title>Title</title>
 </head>
 <body>
+<table>
+    <tr>
+        <td>Nokia1280</td>
+        <td>Iphone13</td>
+    </tr>
+    <tr>
+        <td><input type="text" id="mess1"><button onclick="SendMessageIP13()">Send Message</button></td>
+        <td><input type="text" id="mess2"><button onclick="SendMessageNokia1280()">Send Message</button></td>
+    </tr>
+    <tr>
+        <td><button onclick="on()">on</button><button onclick="off()">off</button></td>
+        <td><button onclick="on1()">on</button><button onclick="off1()">off</button></td>
+    </tr>
+    <tr>
+        <td><button onclick="charge1()">charge</button></td>
+        <td><button onclick="charge2()">charge</button></td>
+    </tr>
+    <tr>
+        <td>Inbox Nokia1280:</td>
+        <td>Inbox Iphone13:</td>
+    </tr>
+    <tr>
+        <td id="inbox1"></td>
+        <td id="inbox2"></td>
+    </tr>
+
+</table>
 <script>
     class Mobile {
         constructor(battery,draft,come,go) {
@@ -42,29 +69,32 @@
         charge(){
             this.battery=100
         }
-        writeMessage(){
+        writeMessage(mess){
             if (this.on===true) {
-                this.draft = prompt('Gửi tin nhắn theo cách cảu bạn còn tính tiền thì để tôi: ')
+                //this.draft = prompt('Gửi tin nhắn theo cách cảu bạn còn tính tiền thì để tôi: ')
+                this.draft=mess
                 this.battery--
                 if (this.battery === 0) {
                     this.on = false
                     alert('Xạc điện thoại vào bạn hiền')
                 }
-            }
+            }else alert('Bật điện thoại lên ơ')
         }
         sendMessage(smart) {
             if (this.on === true) {
                 smart.come.push(this.draft)
+                this.go.push(this.draft)
+                this.draft=''
                 this.battery--
                 if (this.battery === 0) {
                     this.on = false
                     alert('Xạc điện thoại vào bạn hiền')
                 }
-            }
+            }else alert('Bật điện thoại lên ơ')
         }
         mailbox(a){
             if (this.on===true) {
-                let message=a+': '+'<br>'
+                let message='mailbox '+a+': '+'<br>'
                 for (let i=0;i<this.come.length;i++){
                     message=message+"Message "+(i+1)+': '+this.come[i]+'<br>'
                 }
@@ -73,17 +103,62 @@
                     this.on = false
                     alert('Xạc điện thoại vào bạn hiền')
                 }
-            }
+            }else alert('Bật điện thoại lên ơ')
+        }
+        outbox(a){
+            if (this.on===true) {
+                let message='outbox '+a+': '+'<br>'
+                for (let i=0;i<this.come.length;i++){
+                    message=message+"Message "+(i+1)+': '+this.come[i]+'<br>'
+                }
+                document.write(message)
+                if (this.battery === 0) {
+                    this.on = false
+                    alert('Xạc điện thoại vào bạn hiền')
+                }
+            }else alert('Bật điện thoại lên ơ')
         }
     }
-    let arr1=[],arr2=[],draft1='',draft2='',go1='',go2=''
+    let arr1=[],arr2=[],draft1='',draft2='',go1=[],go2=[]
     let nokia1280= new Mobile(20,draft1,arr1,go1)
     let Iphone13= new Mobile(22,draft2,arr2,go2)
-    nokia1280.on()
-    nokia1280.writeMessage()
-    nokia1280.sendMessage(Iphone13)
-    Iphone13.on()
-    Iphone13.mailbox('Iphone13')
+    function SendMessageIP13(){
+        if (nokia1280.on===true) {
+        let mess1 = document.getElementById('mess1').value
+        nokia1280.writeMessage(mess1)
+        nokia1280.sendMessage(Iphone13)
+        let inbox= Iphone13.come.join("-")
+        document.getElementById('inbox2').innerText=inbox
+        }else alert('Bật điện thoại lên ơ')
+    }
+    function SendMessageNokia1280(){
+        if (Iphone13.on===true) {
+            let mess1 = document.getElementById('mess2').value
+            Iphone13.writeMessage(mess1)
+            Iphone13.sendMessage(nokia1280)
+            let inbox= nokia1280.come.join("-")
+            document.getElementById('inbox1').innerText=inbox
+        }else alert('Bật điện thoại lên ơ')
+    }
+    function on(){
+        nokia1280.on()
+    }
+    function off(){
+        nokia1280.off()
+    }
+    function on1(){
+        Iphone13.on()
+    }
+    function off1(){
+        Iphone13.off()
+    }
+    function charge1(){
+        nokia1280.charge()
+    }
+    function charge2() {
+        Iphone13.charge()
+    }
+
 
 </script>
 </body>
